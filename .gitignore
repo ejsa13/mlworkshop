@@ -1,0 +1,8 @@
+mlapi/src/netcore/obj
+mlapi/src/netcore/bin
+mlservice/src/netcore/obj
+mlservice/src/netcore/bin
+dummyproducer/bin
+dummyproducer/obj
+dummydetector/bin
+dummydetector/obj

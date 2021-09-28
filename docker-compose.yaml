@@ -192,7 +192,14 @@ services:
     environment: 
       ELASTICSEARCH_HOSTS: http://elastic:9200
 
-  postgres:
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: example
+  # postgres:
+  #   image: postgres
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_PASSWORD: example
+
+  # adminer:
+  #   image: adminer
+  #   ports:
+  #     - 8090:8080

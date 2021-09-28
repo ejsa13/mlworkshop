@@ -18,6 +18,8 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.2.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />
+    <PackageReference Include="Serilog.Sinks.Postgresql.Alternative" Version="3.3.9" />
+    <PackageReference Include="Serilog.Sinks.PostgreSQL.Configuration" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="*.properties">

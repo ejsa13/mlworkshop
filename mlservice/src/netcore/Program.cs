@@ -23,6 +23,7 @@ namespace netcore
     {
         private static IConfiguration _config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
                 .Build();
         private static Logger _logger;
         private static readonly HttpClient _client = new HttpClient();

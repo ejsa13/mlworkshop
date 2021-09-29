@@ -4,13 +4,8 @@ using System.Threading.Tasks;
 
 namespace mlservice.Interface
 {
-    public interface IDriftDetectorService
+    public interface IDetectorService
     {
-        Task<HttpResponseMessage> OnPostAsync(JsonElement data);
-    }
-
-    public interface IOutlierDetectorService
-    {
-        Task<HttpResponseMessage> OnPostAsync(JsonElement data);
+        Task<HttpResponseMessage> OnPostAsync(string url, JsonElement data);
     }
 }

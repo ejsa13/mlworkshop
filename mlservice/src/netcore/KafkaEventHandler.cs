@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using mlservice.Interface;
 using Serilog;
 
@@ -10,13 +11,13 @@ namespace mlservice
     public class KafkaEventHandler : IKafkaHandler<string, string>
     {
         private readonly ILogger _logger;
-        private readonly IDriftDetectorService _driftService;
-        private readonly IOutlierDetectorService _outlierService;
-        public KafkaEventHandler(ILogger logger, IDriftDetectorService driftDetectorService, IOutlierDetectorService outlierDetectorService)
+        private readonly IDetectorService _detectorService;
+        private readonly IConfiguration _configuration;
+        public KafkaEventHandler(ILogger logger, IDetectorService detectorService, IConfiguration configuration)
         {
             _logger = logger;
-            _driftService = driftDetectorService;
-            _outlierService = outlierDetectorService;
+            _detectorService = detectorService;
+            _configuration = configuration;
         }
         public async Task HandleAsync(string key, string value)
         {
@@ -25,12 +26,12 @@ namespace mlservice
             if(PropertyExsts(message, "json"))
             {
                 _logger.Debug("calling drift detector");
-                var driftResults = await _driftService.OnPostAsync(message.json);
-                _logger.Information($"request: {value}, payload:{message.json}, response: {driftResults}");
+                var driftResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("DriftDetectorUrl"), message.json);
+                _logger.Information($"request: {value}, payload:{message.json}, response: {{{driftResults}}}");
 
                 _logger.Debug("calling outlier detector");
-                var outlierResults = await _outlierService.OnPostAsync(message.json);
-                _logger.Information($"request: {value}, payload:{message.json}, response: {outlierResults}");
+                var outlierResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("OutlierDetectorUrl"), message.json);
+                _logger.Information($"request: {value}, payload:{message.json}, response: {{{outlierResults}}}");
             }
         }
 

@@ -21,8 +21,7 @@ namespace mlservice
                         services.AddSingleton(typeof(ILogger), new LoggerConfiguration()
                                                                     .ReadFrom.Configuration(hostContext.Configuration)
                                                                     .CreateLogger());
-                        services.AddSingleton<IDriftDetectorService, DriftDetectorService>();
-                        services.AddSingleton<IOutlierDetectorService, OutlierDetectorService>();
+                        services.AddSingleton<IDetectorService, DetectorService>();
                         services.AddScoped<IKafkaHandler<string, string>, KafkaEventHandler>();
                         services.AddSingleton(typeof(IKafkaConsumer<,>), typeof(KafkaConsumer<,>));
                         services.AddHostedService<KafkaConsumerService>();

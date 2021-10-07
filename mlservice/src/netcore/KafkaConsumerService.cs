@@ -2,9 +2,12 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+
 using mlservice.Interface;
+
 using Serilog;
 
 namespace mlservice

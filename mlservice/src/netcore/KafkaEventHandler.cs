@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using mlservice.Interface;
 using Serilog;
-
 namespace mlservice
 {
     public class KafkaEventHandler : IKafkaHandler<string, string>
@@ -23,15 +22,17 @@ namespace mlservice
         {
             _logger.Debug($"Consuming message {value}");
             dynamic message = JsonSerializer.Deserialize<ExpandoObject>(value);
-            if(PropertyExsts(message, "json"))
+            if(PropertyExsts(message, "body"))
             {
                 _logger.Debug("calling drift detector");
-                var driftResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("DriftDetectorUrl"), message.json);
-                _logger.Information($"request: {value}, payload:{message.json}, response: {{{driftResults}}}");
-
+                var driftResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("DriftDetectorUrl"), message.body);
+                _logger.Debug($"{{\"detector\":\"drift\", \"request\": {{{value}}}, \"payload\": {{{message.body}}}, \"response\": {{\"StatusCode\":{(int)driftResults.StatusCode}, \"Content\":{await driftResults.Content.ReadAsStringAsync()}}}}}");
+                _logger.Information($"{{\"detector\":\"drift\", \"request\": {{{value}}}, \"payload\": {{{message.body}}}, \"response\": {{\"StatusCode\":{(int)driftResults.StatusCode}, \"Content\":{await driftResults.Content.ReadAsStringAsync()}}}}}");
+                
                 _logger.Debug("calling outlier detector");
-                var outlierResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("OutlierDetectorUrl"), message.json);
-                _logger.Information($"request: {value}, payload:{message.json}, response: {{{outlierResults}}}");
+                var outlierResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("OutlierDetectorUrl"), message.body);
+                _logger.Debug($"{{\"detector\":\"outlier\", \"request\": {{{value}}}, \"payload\": {{{message.body}}}, \"response\": {{\"StatusCode\":{(int)outlierResults.StatusCode}, \"Content\":{await outlierResults.Content.ReadAsStringAsync()}}}}}");
+                _logger.Information($"{{\"detector\":\"outlier\", \"request\": {{{value}}}, \"payload\": {{{message.body}}}, \"response\": {{\"StatusCode\":{(int)outlierResults.StatusCode}, \"Content\":{await outlierResults.Content.ReadAsStringAsync()}}}}}");
             }
         }
 

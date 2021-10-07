@@ -1,10 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Confluent.Kafka;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using Confluent.Kafka;
+
 using mlservice.Interface;
+
 using Serilog;
 
 namespace mlservice

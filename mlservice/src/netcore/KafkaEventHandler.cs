@@ -25,12 +25,12 @@ namespace mlservice
             if(PropertyExsts(message, "body"))
             {
                 _logger.Debug("calling drift detector");
-                var driftResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("DriftDetectorUrl"), message.body);
+                var driftResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("Detector:DriftUrl"), message.body);
                 _logger.Debug($"{{\"detector\":\"drift\", \"request\": {{{value}}}, \"payload\": {{{message.body}}}, \"response\": {{\"StatusCode\":{(int)driftResults.StatusCode}, \"Content\":{await driftResults.Content.ReadAsStringAsync()}}}}}");
                 _logger.Information($"{{\"detector\":\"drift\", \"request\": {{{value}}}, \"payload\": {{{message.body}}}, \"response\": {{\"StatusCode\":{(int)driftResults.StatusCode}, \"Content\":{await driftResults.Content.ReadAsStringAsync()}}}}}");
                 
                 _logger.Debug("calling outlier detector");
-                var outlierResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("OutlierDetectorUrl"), message.body);
+                var outlierResults = await _detectorService.OnPostAsync(_configuration.GetValue<string>("Detector:OutlierUrl"), message.body);
                 _logger.Debug($"{{\"detector\":\"outlier\", \"request\": {{{value}}}, \"payload\": {{{message.body}}}, \"response\": {{\"StatusCode\":{(int)outlierResults.StatusCode}, \"Content\":{await outlierResults.Content.ReadAsStringAsync()}}}}}");
                 _logger.Information($"{{\"detector\":\"outlier\", \"request\": {{{value}}}, \"payload\": {{{message.body}}}, \"response\": {{\"StatusCode\":{(int)outlierResults.StatusCode}, \"Content\":{await outlierResults.Content.ReadAsStringAsync()}}}}}");
             }

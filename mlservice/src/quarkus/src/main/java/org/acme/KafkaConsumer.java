@@ -17,7 +17,7 @@ public class KafkaConsumer {
 
     @Incoming("mlworkshop")
     public void receive(Record<Null, String> record){
-        logger.infof("received cloud event: %s", record.value());
+        logger.debugf("received cloud event: %s", record.value());
         handler.handle(record.value());
     }
 }
